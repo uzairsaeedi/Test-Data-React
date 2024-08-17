@@ -1,0 +1,81 @@
+.chart-container {
+    width: 100%;
+    max-width: 900px;
+    margin: auto;
+    padding: 20px;
+    border: 2px solid #ddd;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    overflow: hidden;
+  }
+  
+  .chart-title {
+    text-align: center;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    color: #333;
+    font-weight: 600;
+  }
+  
+  .chart-description {
+    text-align: center;
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 30px;
+  }
+  
+  .no-data {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #999;
+  }
+  
+  @media (max-width: 768px) {
+    .chart-container {
+      padding: 15px;
+    }
+  
+    .chart-title {
+      font-size: 1.5rem;
+    }
+  
+    .chart-description {
+      font-size: 0.9rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .chart-container {
+      padding: 10px;
+    }
+  
+    .chart-title {
+      font-size: 1.2rem;
+    }
+  
+    .chart-description {
+      font-size: 0.8rem;
+    }
+  }
+  
+  .recharts-tooltip-wrapper {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+  }
+  
+  .recharts-tooltip-label {
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .recharts-tooltip-item {
+    color: #888;
+  }
+  
+  .recharts-bar {
+    border-radius: 4px;
+  }
+  
