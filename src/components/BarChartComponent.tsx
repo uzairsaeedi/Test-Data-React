@@ -1,20 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 import axios from 'axios';
-import './BarChartComponent.css'; 
+import './BarChartComponent.css';
 
-const BarChartComponent = () => {
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+interface DataEntry {
+  date: string;
+  value: number;
+}
+
+const BarChartComponent: React.FC = () => {
+  const [data, setData] = useState<DataEntry[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get('https://django-dev.aakscience.com/candidate_test/fronted');
-        console.log('API Data:', response.data); 
+        console.log('API Data:', response.data);
         const processedData = processData(response.data);
-        console.log('Processed Data:', processedData); 
+        console.log('Processed Data:', processedData);
         setData(processedData);
       } catch (err) {
         setError('Error fetching data');
@@ -27,50 +32,47 @@ const BarChartComponent = () => {
     fetchData();
   }, []);
 
-  const processData = (rawData) => {
+  const processData = (rawData: any): DataEntry[] => {
     if (!Array.isArray(rawData) || rawData.length === 0) {
       console.error('Expected an array of objects but got:', rawData);
       return [];
     }
-
+  
     return rawData.flatMap(entry => {
-      const [year, months] = Object.entries(entry)[0];
-
+      const [, months] = Object.entries(entry)[0]; // Ignore year
       if (!Array.isArray(months)) {
         console.error('Expected an array for months but got:', months);
         return [];
       }
-
+  
       return months.flatMap(month => {
-        const [monthKey, days] = Object.entries(month)[0];
-
+        const [, days] = Object.entries(month)[0]; // Ignore monthKey
         if (!Array.isArray(days)) {
           console.error('Expected an array for days but got:', days);
           return [];
         }
-
+  
         return days.map(day => {
           const [dateKey, value] = Object.entries(day)[0];
-
           try {
             const date = new Date(dateKey.split(' ,')[0]);
-            if (isNaN(date)) {
+            if (isNaN(date.getTime())) {
               console.error('Invalid date:', dateKey);
-              return { date: 'Invalid Date', value: value };
+              return { date: 'Invalid Date', value: 0 };
             }
             return {
               date: date.toISOString().split('T')[0],
-              value: value
+              value: Number(value)
             };
           } catch (e) {
             console.error('Error processing item:', day, e);
-            return { date: 'Error', value: value };
+            return { date: 'Error', value: 0 };
           }
         });
       });
     });
   };
-
+  
   if (loading) return <p className="no-data">Loading...</p>;
   if (error) return <p className="no-data">{error}</p>;
 
